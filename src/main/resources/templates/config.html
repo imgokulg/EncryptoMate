@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Encryption Configuration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Encryption Configuration</h2>
+
+    <div th:if="${message}" class="message">
+        <p th:text="${message}"></p>
+    </div>
+
+    <form th:action="@{/config}" th:object="${encryptionConfig}" method="post">
+        <div class="form-group">
+            <label for="rootPath">Root Path:</label>
+            <input type="text" id="rootPath" th:field="*{rootPath}" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" th:field="*{password}" placeholder="Enter new password" />
+        </div>
+<!--        <div class="form-group">-->
+<!--            <label for="iterationCount">Iteration Count (for KDF):</label>-->
+<!--            <input type="number" id="iterationCount" th:field="*{iterationCount}" />-->
+<!--        </div>-->
+
+        <div class="form-group">
+            <label for="encryptionAlgorithm">Encryption Algorithm:</label>
+            <select id="encryptionAlgorithm" th:field="*{encryptionAlgorithm}">
+                <option th:each="alg : ${encryptionAlgorithms}" th:value="${alg}" th:text="${alg}" th:selected="${alg}==${encryptionAlgorithm}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="keySize">Key Size (bits):</label>
+            <select id="keySize" th:field="*{keySize}">
+                <option th:each="size : ${keySizes}" th:value="${size}" th:text="${size}" th:selected="${size}==${keySize}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="paddingScheme">Padding Scheme:</label>
+            <select id="paddingScheme" th:field="*{paddingScheme}">
+                <option th:each="padding : ${paddingSchemes}" th:value="${padding}" th:text="${padding}" th:selected="${padding}==${paddingScheme}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="hashAlgorithm">Hash Algorithm:</label>
+            <select id="hashAlgorithm" th:field="*{hashAlgorithm}">
+                <option th:each="hash : ${hashAlgorithms}" th:value="${hash}" th:text="${hash}" th:selected="${hash}==${hashAlgorithm}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="keyDerivationFunction">Key Derivation Function:</label>
+            <select id="keyDerivationFunction" th:field="*{keyDerivationFunction}">
+                <option th:each="kdf : ${keyDerivationFunctions}" th:value="${kdf}" th:text="${kdf}" th:selected="${kdf}==${keyDerivationFunction}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="saltLength">Salt Length (bytes):</label>
+            <input type="number" id="saltLength" th:field="*{saltLength}" />
+        </div>
+
+        <div class="form-group">
+            <label for="iterationCount">Iteration Count (for KDF):</label>
+            <input type="number" id="iterationCount" th:field="*{iterationCount}" />
+        </div>
+        <button type="submit">Save Configuration</button>
+    </form>
+</div>
+</body>
+</html>
