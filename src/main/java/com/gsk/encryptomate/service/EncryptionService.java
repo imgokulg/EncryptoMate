@@ -16,7 +16,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -27,8 +26,6 @@ public class EncryptionService {
     @Autowired
     private ConfigService configService;
 
-    private static final int GCM_IV_LENGTH = 12;
-    private static final int GCM_TAG_LENGTH = 16;
     private static final String ENCRYPTED_EXTENSION = ".encrypted";
 
     public void encryptFiles(List<String> filePaths) throws Exception {
