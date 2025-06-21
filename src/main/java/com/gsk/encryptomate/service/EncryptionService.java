@@ -20,13 +20,14 @@ import java.util.List;
 
 @Service
 public class EncryptionService {
+
     @Autowired
-    SecureFileDeleter secureFileDeleter;
+    FileService fileService;
 
     @Autowired
     private ConfigService configService;
 
-    private static final String ENCRYPTED_EXTENSION = ".encrypted";
+    private static final String ENCRYPTED_EXTENSION = ".enc";
 
     public void encryptFiles(List<String> filePaths) throws Exception {
         for (String filePath : filePaths) {
@@ -40,6 +41,13 @@ public class EncryptionService {
         for (String filePath : filePaths) {
             filePath = configService.getEncryptionConfig().getRootPath() + File.separator + filePath;
             decryptFile(filePath);
+        }
+    }
+
+    public void deleteFiles(List<String> filePaths) throws Exception {
+        for (String filePath : filePaths) {
+            filePath = configService.getEncryptionConfig().getRootPath() + File.separator + filePath;
+            fileService.securelyDelete(Paths.get(filePath));
         }
     }
 
@@ -69,7 +77,7 @@ public class EncryptionService {
         String encryptedFilePath = path.getParent().toAbsolutePath() + File.separator + encryptText(path.getFileName().toString()) + ENCRYPTED_EXTENSION;
         Files.write(Paths.get(encryptedFilePath), finalBytes);
 
-        secureFileDeleter.securelyDelete(path);
+        fileService.securelyDelete(path);
     }
 
     private void decryptFile(String filePath) throws Exception {
@@ -97,7 +105,7 @@ public class EncryptionService {
         String originalFilePath = originalFile.getParent().toAbsolutePath() + File.separator + decryptText(originalFile.getFileName().toString());
         Files.write(Paths.get(originalFilePath), decryptedContent);
 
-        secureFileDeleter.securelyDelete(path);
+        fileService.securelyDelete(path);
     }
 
     public String encryptText(String plainText) throws Exception {

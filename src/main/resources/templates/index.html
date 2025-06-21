@@ -42,525 +42,538 @@
 
 <body class="bg-gray-100 text-gray-800 font-sans antialiased">
 
-<div class="container mx-auto p-4 sm:p-6 lg:p-8">
-    <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+    <div id="loader" class="fixed inset-0 bg-white bg-opacity-60 z-50 flex items-center justify-center hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-green-500 border-solid"></div>
+    </div>
 
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex items-center justify-between">
-                <h1 class="text-2xl sm:text-3xl font-semibold text-gray-800 flex items-center gap-2">
-                    EncryptoMate
-                    <i class="fa-regular fa-folder-open text-yellow-500"></i>
-                </h1>
-                <button type="button" id="config"
-                        th:onclick="'location.href=\'' + @{/config} + '\';'"
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h1 class="text-2xl sm:text-3xl font-semibold text-gray-800 flex items-center gap-2">
+                        EncryptoMate
+                        <i class="fa-regular fa-folder-open text-yellow-500"></i>
+                    </h1>
+                    <button type="button" id="config" th:onclick="'location.href=\'' + @{/config} + '\';'"
                         class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                    Config
-                </button>
-            </div>
-
-            <nav aria-label="Breadcrumb" class="mt-3 text-sm text-gray-600">
-                <ol class="list-none p-0 inline-flex items-center space-x-2">
-                    <li>
-                        <a th:if="${parentPath != null}" th:href="@{/(path=${parentPath})}"
-                           class="text-blue-600 hover:text-blue-800 hover:underline flex items-center transition duration-150 ease-in-out">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                 class="w-5 h-5 mr-1 opacity-75">
-                                <path fill-rule="evenodd"
-                                      d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                                      clip-rule="evenodd" />
-                            </svg>
-                            Up
-                        </a>
-                        <span th:unless="${parentPath != null}" class="text-gray-400 flex items-center cursor-default">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                         class="w-5 h-5 mr-1 opacity-50">
-                        <path fill-rule="evenodd"
-                              d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
-                              clip-rule="evenodd" />
-                    </svg>
-                    Up
-                </span>
-                    </li>
-                    <li><span class="text-gray-400">/</span></li>
-                    <li class="text-gray-700 font-medium truncate"
-                        th:title="${currentPath != null && !currentPath.isEmpty() ? currentPath : 'Root'}"
-                        th:text="${currentPath != null && !currentPath.isEmpty() ? currentPath : 'Root'}"></li>
-                </ol>
-            </nav>
-        </div>
-
-        <form th:action="@{/}" method="post" id="file-list-form">
-            <div id="actions-bar-container" class="p-4 bg-gray-50 border-b border-gray-200 hidden">
-                <div class="flex items-center space-x-3">
-                    <span id="selected-count-text" class="text-sm text-gray-700 font-medium">0 files selected</span>
-                    <button type="button" id="encrypt-btn"
-                            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-lock mr-1"></i> Encrypt
-                    </button>
-                    <button type="button" id="decrypt-btn"
-                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-lock-open mr-1"></i> Decrypt
-                    </button>
-                    <button type="button" id="zip-btn"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-file-zipper mr-1"></i> Zip
-                    </button>
-                    <button type="button" id="unzip-btn"
-                            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fa-solid fa-file-archive mr-1"></i> Unzip
+                        Config
                     </button>
                 </div>
+
+                <nav aria-label="Breadcrumb" class="mt-3 text-sm text-gray-600">
+                    <ol class="list-none p-0 inline-flex items-center space-x-2">
+                        <li>
+                            <a th:if="${parentPath != null}" th:href="@{/(path=${parentPath})}"
+                                class="text-blue-600 hover:text-blue-800 hover:underline flex items-center transition duration-150 ease-in-out">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="w-5 h-5 mr-1 opacity-75">
+                                    <path fill-rule="evenodd"
+                                        d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Up
+                            </a>
+                            <span th:unless="${parentPath != null}"
+                                class="text-gray-400 flex items-center cursor-default">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="w-5 h-5 mr-1 opacity-50">
+                                    <path fill-rule="evenodd"
+                                        d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                Up
+                            </span>
+                        </li>
+                        <li><span class="text-gray-400">/</span></li>
+                        <li class="text-gray-700 font-medium truncate"
+                            th:title="${currentPath != null && !currentPath.isEmpty() ? currentPath : 'Root'}"
+                            th:text="${currentPath != null && !currentPath.isEmpty() ? currentPath : 'Root'}"></li>
+                    </ol>
+                </nav>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col"
-                            class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 table-cell-checkbox">
-                            <input type="checkbox" id="select-all-checkbox" title="Select all files"
-                                   class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
-                        </th>
-                        <th scope="col"
-                            class="pl-1 pr-3 py-3.5 text-center text-sm font-semibold text-gray-900 table-cell-icon">
-                            Icon</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name
-                        </th>
-                        <th scope="col"
-                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden sm:table-cell">
-                            Last Modified</th>
-                        <th scope="col"
-                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden md:table-cell">
-                            Size</th>
-                        <th scope="col"
-                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden lg:table-cell">
-                            Type</th>
-                    </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
-                    <tr th:if="${fileInfos == null || #lists.isEmpty(fileInfos)}">
-                        <td colspan="6" class="px-6 py-16 whitespace-nowrap text-sm text-center text-gray-500">
-                            <div class="flex flex-col items-center">
-                                <i class="fa-regular fa-folder-open text-5xl text-gray-300 mb-3"></i>
-                                <p class="font-medium">This folder is empty.</p>
-                                <p class="text-xs text-gray-400 mt-1">There are no files or subfolders here.</p>
-                            </div>
-                        </td>
-                    </tr>
+            <form th:action="@{/}" method="post" id="file-list-form">
+                <div id="actions-bar-container" class="p-4 bg-gray-50 border-b border-gray-200 hidden">
+                    <div class="flex items-center space-x-3">
+                        <span id="selected-count-text" class="text-sm text-gray-700 font-medium">0 files selected</span>
+                        <button type="button" id="encrypt-btn"
+                            class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-lock mr-1"></i> Encrypt
+                        </button>
+                        <button type="button" id="decrypt-btn"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-lock-open mr-1"></i> Decrypt
+                        </button>
+                        <button type="button" id="zip-btn"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-file-zipper mr-1"></i> Zip
+                        </button>
+                        <button type="button" id="unzip-btn"
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-file-archive mr-1"></i> Unzip
+                        </button>
+                        <button type="button" id="delete-btn"
+                            class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md text-sm shadow-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fa-solid fa-file-archive mr-1"></i> Delete
+                        </button>
+                    </div>
+                </div>
 
-                    <tr th:each="file : ${fileInfos}"
-                        class="hover:bg-gray-50 transition duration-150 ease-in-out"
-                        th:classappend="${file.isDirectory} ? 'cursor-pointer' : ''"
-                        th:attr="data-path=${file.path}, data-is-directory=${file.isDirectory}"
-                        th:onclick="${file.isDirectory} ? 'navigateToRow(\'' + @{/(path=${file.path})} + '\')' : null">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col"
+                                    class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900 table-cell-checkbox">
+                                    <input type="checkbox" id="select-all-checkbox" title="Select all files"
+                                        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                                </th>
+                                <th scope="col"
+                                    class="pl-1 pr-3 py-3.5 text-center text-sm font-semibold text-gray-900 table-cell-icon">
+                                    Icon</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name
+                                </th>
+                                <th scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden sm:table-cell">
+                                    Last Modified</th>
+                                <th scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden md:table-cell">
+                                    Size</th>
+                                <th scope="col"
+                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 hidden lg:table-cell">
+                                    Type</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            <tr th:if="${fileInfos == null || #lists.isEmpty(fileInfos)}">
+                                <td colspan="6" class="px-6 py-16 whitespace-nowrap text-sm text-center text-gray-500">
+                                    <div class="flex flex-col items-center">
+                                        <i class="fa-regular fa-folder-open text-5xl text-gray-300 mb-3"></i>
+                                        <p class="font-medium">This folder is empty.</p>
+                                        <p class="text-xs text-gray-400 mt-1">There are no files or subfolders here.</p>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        <td class="whitespace-nowrap px-4 py-2.5 text-sm text-gray-500 table-cell-checkbox">
-                            <input th:unless="${file.isDirectory}" type="checkbox" name="selectedFilePaths"
-                                   th:value="${file.path}"
-                                   class="file-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                                   th:title="'Select ' + ${file.name}" onclick="event.stopPropagation();">
-                        </td>
+                            <tr th:each="file : ${fileInfos}"
+                                class="hover:bg-gray-50 transition duration-150 ease-in-out"
+                                th:classappend="${file.isDirectory} ? 'cursor-pointer' : ''"
+                                th:attr="data-path=${file.path}, data-is-directory=${file.isDirectory}"
+                                th:onclick="${file.isDirectory} ? 'navigateToRow(\'' + @{/(path=${file.path})} + '\')' : null">
 
-                        <td class="whitespace-nowrap pl-1 pr-3 py-2.5 text-sm text-gray-500 table-cell-icon">
-                            <div class="flex items-center justify-center w-full h-full text-xl">
-                                <i th:if="${file.icon != null and !#strings.isEmpty(file.icon)}"
-                                   th:class="${file.icon}">
-                                </i>
-                                <th:block th:unless="${file.icon != null and !#strings.isEmpty(file.icon)}">
-                                    <i th:if="${file.isDirectory}"
-                                       class="fa-solid fa-folder text-yellow-500"></i>
-                                    <i th:unless="${file.isDirectory}"
-                                       class="fa-solid fa-file text-blue-500"></i>
-                                </th:block>
-                            </div>
-                        </td>
+                                <td class="whitespace-nowrap px-4 py-2.5 text-sm text-gray-500 table-cell-checkbox">
+                                    <input th:unless="${file.isDirectory}" type="checkbox" name="selectedFilePaths"
+                                        th:value="${file.path}"
+                                        class="file-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                                        th:title="'Select ' + ${file.name}" onclick="event.stopPropagation();">
+                                </td>
 
-                        <td class="whitespace-nowrap px-3 py-2.5 text-sm font-medium">
-                            <a th:if="${file.isDirectory}" th:href="@{/(path=${file.path})}"
-                               class="text-gray-700 hover:text-blue-600 hover:underline" th:text="${file.name}"
-                               th:title="${file.name}" onclick="event.stopPropagation();"></a>
-                            <span th:unless="${file.isDirectory}"
-                                  class="text-gray-800 hover:text-blue-600 hover:underline cursor-pointer"
-                                  th:text="${file.name}" th:title="'Preview ' + ${file.name}"
-                                  th:attr="data-path=${file.path}, data-name=${file.name}, data-file-type=${file.fileType ?: ''}"
-                                  onclick="openFilePreviewModal(this.getAttribute('data-path'), this.getAttribute('data-name'), this.getAttribute('data-file-type')); event.stopPropagation();">
-                                    </span>
-                        </td>
+                                <td class="whitespace-nowrap pl-1 pr-3 py-2.5 text-sm text-gray-500 table-cell-icon">
+                                    <div class="flex items-center justify-center w-full h-full text-xl">
+                                        <i th:if="${file.icon != null and !#strings.isEmpty(file.icon)}"
+                                            th:class="${file.icon}">
+                                        </i>
+                                        <th:block th:unless="${file.icon != null and !#strings.isEmpty(file.icon)}">
+                                            <i th:if="${file.isDirectory}"
+                                                class="fa-solid fa-folder text-yellow-500"></i>
+                                            <i th:unless="${file.isDirectory}"
+                                                class="fa-solid fa-file text-blue-500"></i>
+                                        </th:block>
+                                    </div>
+                                </td>
 
-                        <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 hidden sm:table-cell"
-                            th:text="${file.lastModified != null ? #temporals.format(file.lastModified, 'dd MMM yyyy, HH:mm') : 'N/A'}">
-                        </td>
-
-                        <td
-                                class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 text-right hidden md:table-cell">
+                                <td class="whitespace-nowrap px-3 py-2.5 text-sm font-medium">
+                                    <a th:if="${file.isDirectory}" th:href="@{/(path=${file.path})}"
+                                        class="text-gray-700 hover:text-blue-600 hover:underline" th:text="${file.name}"
+                                        th:title="${file.name}" onclick="event.stopPropagation();"></a>
                                     <span th:unless="${file.isDirectory}"
-                                          th:text="${file.size <= 0 ? '0 B' : (#numbers.formatDecimal(file.size / 1024.0, 1, 1, 'POINT') + ' KB')}"></span>
-                            <span th:if="${file.isDirectory}">—</span>
-                        </td>
+                                        class="text-gray-800 hover:text-blue-600 hover:underline cursor-pointer"
+                                        th:text="${file.name}" th:title="'Preview ' + ${file.name}"
+                                        th:attr="data-path=${file.path}, data-name=${file.name}, data-file-type=${file.fileType ?: ''}"
+                                        onclick="openFilePreviewModal(this.getAttribute('data-path'), this.getAttribute('data-name'), this.getAttribute('data-file-type')); event.stopPropagation();">
+                                    </span>
+                                </td>
 
-                        <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 hidden lg:table-cell"
-                            th:text="${file.isDirectory ? 'Folder' : (file.fileType ?: 'File')}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </form>
+                                <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 hidden sm:table-cell"
+                                    th:text="${file.lastModified != null ? #temporals.format(file.lastModified, 'dd MMM yyyy, HH:mm') : 'N/A'}">
+                                </td>
+
+                                <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 text-right hidden md:table-cell"
+                                    th:title="${file.isDirectory ? 'Folder' : (file.formattedSize)}">
+                                    <span th:unless="${file.isDirectory}"
+                                        th:text="${file.size <= 0 ? '0 B' : file.formattedSize}"></span>
+                                    <span th:if="${file.isDirectory}">—</span>
+                                </td>
+
+                                <td class="whitespace-nowrap px-3 py-2.5 text-sm text-gray-500 hidden lg:table-cell"
+                                    th:text="${file.isDirectory ? 'Folder' : (file.fileType ?: 'File')}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div id="filePreviewModal"
-     class="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center hidden z-50 p-4">
-    <div class="relative mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 shadow-xl rounded-lg bg-white">
-        <div class="flex justify-between items-center p-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800 truncate" id="modalFileName">File Preview</h3>
-            <button id="closeModalButton"
+    <div id="filePreviewModal"
+        class="fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center hidden z-50 p-4">
+        <div class="relative mx-auto w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 shadow-xl rounded-lg bg-white">
+            <div class="flex justify-between items-center p-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 truncate" id="modalFileName">File Preview</h3>
+                <button id="closeModalButton"
                     class="text-gray-400 hover:text-gray-600 transition rounded-full p-1 hover:bg-gray-100">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                     xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg>
-            </button>
-        </div>
-        <div class="p-4" id="modalContentArea" style="max-height: 75vh; overflow-y: auto;">
-            <p class="text-center text-gray-500 py-8">Loading preview...</p>
-        </div>
-        <div class="flex justify-end items-center p-4 border-t border-gray-200 space-x-3">
-            <a id="modalDownloadButton" href="#" download
-               class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hidden">
-                <i class="fa-solid fa-download mr-1"></i> Download
-            </a>
-            <button id="closeModalFooterButton"
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4" id="modalContentArea" style="max-height: 75vh; overflow-y: auto;">
+                <p class="text-center text-gray-500 py-8">Loading preview...</p>
+            </div>
+            <div class="flex justify-end items-center p-4 border-t border-gray-200 space-x-3">
+                <a id="modalDownloadButton" href="#" download
+                    class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 hidden">
+                    <i class="fa-solid fa-download mr-1"></i> Download
+                </a>
+                <button id="closeModalFooterButton"
                     class="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-md shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
-                Close
-            </button>
+                    Close
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
-<script th:inline="javascript">
-    /*<![CDATA[*/
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
-    // Helper to escape HTML for text previews
-    function escapeHtml(unsafe) {
-        if (typeof unsafe !== 'string') return '';
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    function openFilePreviewModal(filePath, fileName, fileType) {
-        const modal = document.getElementById('filePreviewModal');
-        const modalFileNameEl = document.getElementById('modalFileName');
-        const modalContentAreaEl = document.getElementById('modalContentArea');
-        const modalDownloadButton = document.getElementById('modalDownloadButton');
-
-        if (!modal || !modalFileNameEl || !modalContentAreaEl || !modalDownloadButton) {
-            console.error('Modal elements not found!');
-            return;
+        // Helper to escape HTML for text previews
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
-        modalFileNameEl.textContent = fileName;
-        modalContentAreaEl.innerHTML = '<p class="text-center text-gray-500 py-8 animate-pulse">Loading preview...</p>';
+        function openFilePreviewModal(filePath, fileName, fileType) {
+            const modal = document.getElementById('filePreviewModal');
+            const modalFileNameEl = document.getElementById('modalFileName');
+            const modalContentAreaEl = document.getElementById('modalContentArea');
+            const modalDownloadButton = document.getElementById('modalDownloadButton');
 
-        const downloadUrlBase = /*[[@{/download}]]*/ '/download';
-        const downloadUrl = `${downloadUrlBase}/?path=${encodeURIComponent(filePath)}`;
-        modalDownloadButton.href = downloadUrl;
-        modalDownloadButton.setAttribute('download', fileName);
-        modalDownloadButton.classList.remove('hidden');
-
-        modal.classList.remove('hidden');
-        document.body.classList.add('overflow-hidden');
-
-        const previewUrlBase = /*[[@{/download}]]*/ '/download';
-        const previewUrl = `${previewUrlBase}/?path=${encodeURIComponent(filePath)}`;
-        const normalizedFileType = fileType ? fileType.toLowerCase() : '';
-
-        // Adjust these conditions if your fileType is not a standard MIME type
-        if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico', '.apng', '.avif', '.tif'].includes('.' + normalizedFileType)) {
-            modalContentAreaEl.innerHTML = `<img src="${previewUrl}" alt="Preview of ${fileName}" class="max-w-full h-auto mx-auto object-contain" onerror="this.parentElement.innerHTML = '<div class=\\'text-center p-4\\'><i class=\\'fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2\\'></i><p class=\\'text-red-600\\'>Error loading image preview.</p></div>';" />`;
-        } else if (normalizedFileType === 'application/pdf') {
-            modalContentAreaEl.innerHTML = `<iframe src="${previewUrl}" type="application/pdf" class="w-full border-0" style="min-height: 70vh;">Your browser does not support PDF previews. <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline">Download PDF</a></iframe>`;
-        } else if (['.txt', '.log', '.md', '.csv', '.tsv', '.json', '.xml', '.yaml', '.ini', '.cfg', '.env', '.bat', '.sh', '.ps', '.java', '.py', '.js', '.ts', '.cpp', '.c', '.cs', '.html', '.css', '.scss', '.sql', '.php', '.rb', '.go', '.rs', '.kt'].includes('.' + normalizedFileType) ||
-            normalizedFileType.startsWith('text/') || ['application/json', 'application/xml', 'application/javascript', 'application/xhtml+xml', 'application/csv', 'text/markdown'].includes(normalizedFileType)) {
-            fetch(previewUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} on ${response.url}`);
-                    return response.text();
-                })
-                .then(text => {
-                    modalContentAreaEl.innerHTML = `<pre class="whitespace-pre-wrap break-all text-sm">${escapeHtml(text)}</pre>`;
-                })
-                .catch(error => {
-                    console.error("Error fetching text preview:", error);
-                    modalContentAreaEl.innerHTML = `<div class="text-center p-4"><i class="fa-solid fa-circle-exclamation text-red-500 text-3xl mb-2"></i><p class="text-red-600">Could not load text preview.</p><p class="text-xs text-gray-500 mt-1">${escapeHtml(error.message)}</p></div>`;
-                });
-        } else if (normalizedFileType.startsWith('audio/')) {
-            modalContentAreaEl.innerHTML = `<div class="p-4 flex flex-col items-center"><audio controls src="${previewUrl}" class="w-full max-w-md">Your browser does not support the audio element. <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline">Download Audio</a></audio></div>`;
-
-        } else if (['.mp4', '.webm', '.og', '.og'].includes('.' + normalizedFileType)) {
-            modalContentAreaEl.innerHTML = `<div class="p-4 flex flex-col items-center"><video controls src="${previewUrl}" class="w-full max-w-2xl mx-auto bg-black" style="max-height: 70vh;">Your browser does not support the video tag. <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline">Download Video</a></video></div>`;
-        } else {
-            modalContentAreaEl.innerHTML = `<div class="text-center p-8"><i class="fa-solid fa-eye-slash text-gray-400 text-4xl mb-3"></i><p class="text-gray-700 font-medium">Preview not available</p><p class="text-sm text-gray-500">File type: ${escapeHtml(fileType) || 'Unknown'}</p><p class="mt-4">You can try to <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline font-semibold">download the file</a> instead.</p></div>`;
-        }
-    }
-
-    function closeFilePreviewModal() {
-        const modal = document.getElementById('filePreviewModal');
-        if (modal) {
-            modal.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-            // Optional: Clear content to free up memory, especially for iframes/large content
-            // document.getElementById('modalContentArea').innerHTML = '';
-            // document.getElementById('modalFileName').textContent = 'File Preview';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const selectAllCheckbox = document.getElementById('select-all-checkbox');
-        const fileCheckboxes = document.querySelectorAll('.file-checkbox');
-        const selectedCountTextEl = document.getElementById('selected-count-text');
-        const actionsBarContainerEl = document.getElementById('actions-bar-container');
-        const processSelectedBtnEl = document.getElementById('process-selected-btn-form');
-
-        function updateSelectionUI() {
-            const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
-            const count = checkedFileCheckboxes.length;
-
-            if (selectedCountTextEl) {
-                selectedCountTextEl.textContent = count + (count === 1 ? ' file' : ' files') + ' selected';
-            }
-            if (actionsBarContainerEl) {
-                actionsBarContainerEl.classList.toggle('hidden', count === 0);
-            }
-            if (processSelectedBtnEl) {
-                processSelectedBtnEl.disabled = count === 0;
-            }
-            if (selectAllCheckbox) {
-                if (fileCheckboxes.length > 0) {
-                    selectAllCheckbox.checked = count === fileCheckboxes.length;
-                    selectAllCheckbox.indeterminate = count > 0 && count < fileCheckboxes.length;
-                    selectAllCheckbox.disabled = false;
-                } else {
-                    selectAllCheckbox.checked = false;
-                    selectAllCheckbox.indeterminate = false;
-                    selectAllCheckbox.disabled = true;
-                }
-            }
-        }
-
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', function (e) {
-                fileCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-                updateSelectionUI();
-            });
-        }
-        fileCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateSelectionUI));
-        updateSelectionUI(); // Initial call
-
-        // Modal close event listeners
-        const closeModalButton = document.getElementById('closeModalButton');
-        const closeModalFooterButton = document.getElementById('closeModalFooterButton');
-        const modal = document.getElementById('filePreviewModal');
-
-        if (closeModalButton) closeModalButton.addEventListener('click', closeFilePreviewModal);
-        if (closeModalFooterButton) closeModalFooterButton.addEventListener('click', closeFilePreviewModal);
-        if (modal) {
-            modal.addEventListener('click', function (event) { // Click on backdrop
-                if (event.target === modal) closeFilePreviewModal();
-            });
-        }
-        window.addEventListener('keydown', function (event) { // ESC key
-            if (event.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
-                closeFilePreviewModal();
-            }
-        });
-    });
-    /*]]>*/
-    /*<![CDATA[*/
-
-    // ... (escapeHtml, openFilePreviewModal, closeFilePreviewModal functions remain the same) ...
-
-    function getSelectedFilePaths() {
-        const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
-        const filePaths = [];
-        checkedFileCheckboxes.forEach(checkbox => {
-            filePaths.push(checkbox.value);
-        });
-        return filePaths;
-    }
-
-    async function handleFileAction(actionType, filePaths) {
-        if (filePaths.length === 0) {
-            alert("Please select at least one file.");
-            return;
-        }
-
-        const requestBody = {
-            filePaths: filePaths
-        };
-
-        let endpoint = '';
-
-        switch (actionType) {
-            case 'encrypt':
-                endpoint = /*[[@{/encrypt}]]*/ '/encrypt';
-                break;
-            case 'decrypt':
-                endpoint = /*[[@{/decrypt}]]*/ '/decrypt';
-                break;
-            case 'zip':
-                endpoint = /*[[@{/zip}]]*/ '/zip';
-                break;
-            case 'unzip':
-                endpoint = /*[[@{/unzip}]]*/ '/unzip';
-                break;
-            default:
-                console.error("Unknown action type:", actionType);
-                alert("Unknown action type.");
+            if (!modal || !modalFileNameEl || !modalContentAreaEl || !modalDownloadButton) {
+                console.error('Modal elements not found!');
                 return;
-        }
-
-        // Placeholder for actual fetch API call
-        try {
-
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Add any other headers like CSRF tokens if needed
-                },
-                body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({ message: 'Failed to process request. Server returned: ' + response.status }));
-                throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
             }
 
-            const result = await response.json(); // Or response.text() if your API returns plain text
-            console.log(`${actionType} successful:`, result);
-            alert(`${actionType} successful!`);
-            window.location.reload();
-        } catch (error) {
-            console.error(`Error during ${actionType}:`, error);
-            alert(`Error during ${actionType}: ${error.message}. Please check the console.`);
-        }
-    }
+            modalFileNameEl.textContent = fileName;
+            modalContentAreaEl.innerHTML = '<p class="text-center text-gray-500 py-8 animate-pulse">Loading preview...</p>';
 
+            const downloadUrlBase = /*[[@{/download}]]*/ '/download';
+            const downloadUrl = `${downloadUrlBase}/?path=${encodeURIComponent(filePath)}`;
+            modalDownloadButton.href = downloadUrl;
+            modalDownloadButton.setAttribute('download', fileName);
+            modalDownloadButton.classList.remove('hidden');
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // ... (Existing checkbox selection UI update logic - updateSelectionUI) ...
-        // ... (Existing modal close event listeners) ...
+            modal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
 
+            const previewUrlBase = /*[[@{/download}]]*/ '/download';
+            const previewUrl = `${previewUrlBase}/?path=${encodeURIComponent(filePath)}`;
+            const normalizedFileType = fileType ? fileType.toLowerCase() : '';
 
-        const encryptBtn = document.getElementById('encrypt-btn');
-        const decryptBtn = document.getElementById('decrypt-btn');
-        const zipBtn = document.getElementById('zip-btn');
-        const unzipBtn = document.getElementById('unzip-btn');
+            // Adjust these conditions if your fileType is not a standard MIME type
+            if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg', '.ico', '.apng', '.avif', '.tif'].includes('.' + normalizedFileType)) {
+                modalContentAreaEl.innerHTML = `<img src="${previewUrl}" alt="Preview of ${fileName}" class="max-w-full h-auto mx-auto object-contain" onerror="this.parentElement.innerHTML = '<div class=\\'text-center p-4\\'><i class=\\'fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2\\'></i><p class=\\'text-red-600\\'>Error loading image preview.</p></div>';" />`;
+            } else if (['.txt', '.log', '.md', '.csv', '.tsv', '.json', '.xml', '.yaml', '.ini', '.cfg', '.env', '.bat', '.sh', '.ps', '.java', '.py', '.js', '.ts', '.cpp', '.c', '.cs', '.html', '.css', '.scss', '.sql', '.php', '.rb', '.go', '.rs', '.kt'].includes('.' + normalizedFileType) ||
+                normalizedFileType.startsWith('text/') || ['application/json', 'application/xml', 'application/javascript', 'application/xhtml+xml', 'application/csv', 'text/markdown'].includes(normalizedFileType)) {
+                fetch(previewUrl)
+                    .then(response => {
+                        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status} on ${response.url}`);
+                        return response.text();
+                    })
+                    .then(text => {
+                        modalContentAreaEl.innerHTML = `<pre class="whitespace-pre-wrap break-all text-sm">${escapeHtml(text)}</pre>`;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching text preview:", error);
+                        modalContentAreaEl.innerHTML = `<div class="text-center p-4"><i class="fa-solid fa-circle-exclamation text-red-500 text-3xl mb-2"></i><p class="text-red-600">Could not load text preview.</p><p class="text-xs text-gray-500 mt-1">${escapeHtml(error.message)}</p></div>`;
+                    });
+            } else if (normalizedFileType.startsWith('audio/')) {
+                modalContentAreaEl.innerHTML = `<div class="p-4 flex flex-col items-center"><audio controls src="${previewUrl}" class="w-full max-w-md">Your browser does not support the audio element. <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline">Download Audio</a></audio></div>`;
 
-        const actionButtons = [encryptBtn, decryptBtn, zipBtn, unzipBtn];
-
-        function updateActionButtonsState(count) {
-            actionButtons.forEach(btn => {
-                if (btn) btn.disabled = (count === 0);
-            });
-        }
-
-        // Extend updateSelectionUI to also manage action buttons
-        const originalUpdateSelectionUI = window.updateSelectionUI; // Assuming updateSelectionUI is globally accessible or refactor
-        window.updateSelectionUI = function () { // If updateSelectionUI is not global, you need to define it here or pass the button states
-            if (originalUpdateSelectionUI) originalUpdateSelectionUI(); // Call original if it exists
-
-            // This part might be integrated into your existing updateSelectionUI if it's in the same scope
-            const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
-            const count = checkedFileCheckboxes.length;
-            updateActionButtonsState(count); // Enable/disable action buttons based on selection
-        };
-
-        // If updateSelectionUI is defined later or in a different scope, ensure this logic is integrated.
-        // For now, assuming it's accessible or we're redefining its core part here for buttons.
-        // This is a simplified way to integrate; proper scoping is key.
-        // If updateSelectionUI is defined within the DOMContentLoaded, we need to modify it there.
-
-        // Let's modify the existing updateSelectionUI directly for robustness
-        const selectAllCheckbox = document.getElementById('select-all-checkbox');
-        const fileCheckboxes = document.querySelectorAll('.file-checkbox');
-        const selectedCountTextEl = document.getElementById('selected-count-text');
-        const actionsBarContainerEl = document.getElementById('actions-bar-container');
-        // const processSelectedBtnEl = document.getElementById('process-selected-btn-form'); // This is removed
-
-        // Redefine or ensure this is the main updateSelectionUI function
-        function newUpdateSelectionUI() {
-            const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
-            const count = checkedFileCheckboxes.length;
-
-            if (selectedCountTextEl) {
-                selectedCountTextEl.textContent = count + (count === 1 ? ' file' : ' files') + ' selected';
+            } else if (['.mp4', '.mkv', '.webm', '.og', '.og'].includes('.' + normalizedFileType)) {
+                modalContentAreaEl.innerHTML = `<div class="p-4 flex flex-col items-center"><video controls src="${previewUrl}" class="w-full max-w-2xl mx-auto bg-black" style="max-height: 70vh;">Your browser does not support the video tag. <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline">Download Video</a></video></div>`;
+            } else {
+                modalContentAreaEl.innerHTML = `<div class="text-center p-8"><i class="fa-solid fa-eye-slash text-gray-400 text-4xl mb-3"></i><p class="text-gray-700 font-medium">Preview not available</p><p class="text-sm text-gray-500">File type: ${escapeHtml(fileType) || 'Unknown'}</p><p class="mt-4">You can try to <a href="${downloadUrl}" download="${fileName}" class="text-blue-600 hover:underline font-semibold">download the file</a> instead.</p></div>`;
             }
-            if (actionsBarContainerEl) {
-                actionsBarContainerEl.classList.toggle('hidden', count === 0);
+        }
+
+        function closeFilePreviewModal() {
+            const modal = document.getElementById('filePreviewModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+                document.getElementById('modalContentArea').innerHTML = '';
+                document.getElementById('modalFileName').textContent = 'File Preview';
             }
-            // if (processSelectedBtnEl) { // Button removed
-            //     processSelectedBtnEl.disabled = count === 0;
-            // }
-            if (selectAllCheckbox) {
-                if (fileCheckboxes.length > 0) {
-                    selectAllCheckbox.checked = count === fileCheckboxes.length;
-                    selectAllCheckbox.indeterminate = count > 0 && count < fileCheckboxes.length;
-                    selectAllCheckbox.disabled = false;
-                } else {
-                    selectAllCheckbox.checked = false;
-                    selectAllCheckbox.indeterminate = false;
-                    selectAllCheckbox.disabled = true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+            const selectedCountTextEl = document.getElementById('selected-count-text');
+            const actionsBarContainerEl = document.getElementById('actions-bar-container');
+            const processSelectedBtnEl = document.getElementById('process-selected-btn-form');
+
+            function updateSelectionUI() {
+                const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
+                const count = checkedFileCheckboxes.length;
+
+                if (selectedCountTextEl) {
+                    selectedCountTextEl.textContent = count + (count === 1 ? ' file' : ' files') + ' selected';
+                }
+                if (actionsBarContainerEl) {
+                    actionsBarContainerEl.classList.toggle('hidden', count === 0);
+                }
+                if (processSelectedBtnEl) {
+                    processSelectedBtnEl.disabled = count === 0;
+                }
+                if (selectAllCheckbox) {
+                    if (fileCheckboxes.length > 0) {
+                        selectAllCheckbox.checked = count === fileCheckboxes.length;
+                        selectAllCheckbox.indeterminate = count > 0 && count < fileCheckboxes.length;
+                        selectAllCheckbox.disabled = false;
+                    } else {
+                        selectAllCheckbox.checked = false;
+                        selectAllCheckbox.indeterminate = false;
+                        selectAllCheckbox.disabled = true;
+                    }
                 }
             }
-            updateActionButtonsState(count); // New line to update our action buttons
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function (e) {
+                    fileCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+                    updateSelectionUI();
+                });
+            }
+            fileCheckboxes.forEach(checkbox => checkbox.addEventListener('change', updateSelectionUI));
+            updateSelectionUI(); // Initial call
+
+            // Modal close event listeners
+            const closeModalButton = document.getElementById('closeModalButton');
+            const closeModalFooterButton = document.getElementById('closeModalFooterButton');
+            const modal = document.getElementById('filePreviewModal');
+
+            if (closeModalButton) closeModalButton.addEventListener('click', closeFilePreviewModal);
+            if (closeModalFooterButton) closeModalFooterButton.addEventListener('click', closeFilePreviewModal);
+            if (modal) {
+                modal.addEventListener('click', function (event) { // Click on backdrop
+                    if (event.target === modal) closeFilePreviewModal();
+                });
+            }
+            window.addEventListener('keydown', function (event) { // ESC key
+                if (event.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    closeFilePreviewModal();
+                }
+            });
+        });
+        /*]]>*/
+        /*<![CDATA[*/
+
+        // ... (escapeHtml, openFilePreviewModal, closeFilePreviewModal functions remain the same) ...
+
+        function getSelectedFilePaths() {
+            const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
+            const filePaths = [];
+            checkedFileCheckboxes.forEach(checkbox => {
+                filePaths.push(checkbox.value);
+            });
+            return filePaths;
         }
 
-        if (selectAllCheckbox) {
-            selectAllCheckbox.addEventListener('change', function (e) {
-                fileCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
-                newUpdateSelectionUI(); // Use the new/updated UI function
-            });
+        async function handleFileAction(actionType, filePaths) {
+            if (filePaths.length === 0) {
+                alert("Please select at least one file.");
+                return;
+            }
+
+            const requestBody = {
+                filePaths: filePaths
+            };
+
+            let endpoint = '';
+
+            switch (actionType) {
+                case 'encrypt':
+                    endpoint = /*[[@{/encrypt}]]*/ '/encrypt';
+                    break;
+                case 'decrypt':
+                    endpoint = /*[[@{/decrypt}]]*/ '/decrypt';
+                    break;
+                case 'zip':
+                    endpoint = /*[[@{/zip}]]*/ '/zip';
+                    break;
+                case 'unzip':
+                    endpoint = /*[[@{/unzip}]]*/ '/unzip';
+                    break;
+                case 'delete':
+                    endpoint = /*[[@{/delete}]]*/ '/delete';
+                    break;
+                default:
+                    console.error("Unknown action type:", actionType);
+                    alert("Unknown action type.");
+                    return;
+            }
+
+            // Placeholder for actual fetch API call
+            try {
+                document.getElementById("loader").classList.remove("hidden");
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any other headers like CSRF tokens if needed
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: 'Failed to process request. Server returned: ' + response.status }));
+                    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+                }
+                document.getElementById("loader").classList.add("hidden");
+                const result = await response.json(); // Or response.text() if your API returns plain text
+                console.log(`${actionType} successful:`, result);
+                alert(`${actionType} successful!`);
+                window.location.reload();
+            } catch (error) {
+                console.error(`Error during ${actionType}:`, error);
+                alert(`Error during ${actionType}: ${error.message}. Please check the console.`);
+            }
         }
-        fileCheckboxes.forEach(checkbox => checkbox.addEventListener('change', newUpdateSelectionUI)); // Use the new/updated UI function
 
 
-        // Event listeners for new action buttons
-        if (encryptBtn) {
-            encryptBtn.addEventListener('click', function () {
-                const selectedPaths = getSelectedFilePaths();
-                handleFileAction('encrypt', selectedPaths);
-            });
-        }
-        if (decryptBtn) {
-            decryptBtn.addEventListener('click', function () {
-                const selectedPaths = getSelectedFilePaths();
-                handleFileAction('decrypt', selectedPaths);
-            });
-        }
-        if (zipBtn) {
-            zipBtn.addEventListener('click', function () {
-                const selectedPaths = getSelectedFilePaths();
-                handleFileAction('zip', selectedPaths);
-            });
-        }
-        if (unzipBtn) {
-            unzipBtn.addEventListener('click', function () {
-                const selectedPaths = getSelectedFilePaths();
-                handleFileAction('unzip', selectedPaths);
-                // Note: Unzipping typically applies to a single archive.
-                // You might want to add logic to ensure only one file (an archive) is selected for unzipping.
-            });
-        }
-        newUpdateSelectionUI(); // Initial call to set button states and UI
-    });
-    /*]]>*/
-</script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ... (Existing checkbox selection UI update logic - updateSelectionUI) ...
+            // ... (Existing modal close event listeners) ...
+
+
+            const encryptBtn = document.getElementById('encrypt-btn');
+            const decryptBtn = document.getElementById('decrypt-btn');
+            const zipBtn = document.getElementById('zip-btn');
+            const unzipBtn = document.getElementById('unzip-btn');
+            const deleteBtn = document.getElementById('delete-btn');
+
+            const actionButtons = [encryptBtn, decryptBtn, zipBtn, unzipBtn, deleteBtn];
+
+            function updateActionButtonsState(count) {
+                actionButtons.forEach(btn => {
+                    if (btn) btn.disabled = (count === 0);
+                });
+            }
+
+            // Extend updateSelectionUI to also manage action buttons
+            const originalUpdateSelectionUI = window.updateSelectionUI; // Assuming updateSelectionUI is globally accessible or refactor
+            window.updateSelectionUI = function () { // If updateSelectionUI is not global, you need to define it here or pass the button states
+                if (originalUpdateSelectionUI) originalUpdateSelectionUI(); // Call original if it exists
+
+                // This part might be integrated into your existing updateSelectionUI if it's in the same scope
+                const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
+                const count = checkedFileCheckboxes.length;
+                updateActionButtonsState(count); // Enable/disable action buttons based on selection
+            };
+
+            // If updateSelectionUI is defined later or in a different scope, ensure this logic is integrated.
+            // For now, assuming it's accessible or we're redefining its core part here for buttons.
+            // This is a simplified way to integrate; proper scoping is key.
+            // If updateSelectionUI is defined within the DOMContentLoaded, we need to modify it there.
+
+            // Let's modify the existing updateSelectionUI directly for robustness
+            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+            const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+            const selectedCountTextEl = document.getElementById('selected-count-text');
+            const actionsBarContainerEl = document.getElementById('actions-bar-container');
+            // const processSelectedBtnEl = document.getElementById('process-selected-btn-form'); // This is removed
+
+            // Redefine or ensure this is the main updateSelectionUI function
+            function newUpdateSelectionUI() {
+                const checkedFileCheckboxes = document.querySelectorAll('.file-checkbox:checked');
+                const count = checkedFileCheckboxes.length;
+
+                if (selectedCountTextEl) {
+                    selectedCountTextEl.textContent = count + (count === 1 ? ' file' : ' files') + ' selected';
+                }
+                if (actionsBarContainerEl) {
+                    actionsBarContainerEl.classList.toggle('hidden', count === 0);
+                }
+                // if (processSelectedBtnEl) { // Button removed
+                //     processSelectedBtnEl.disabled = count === 0;
+                // }
+                if (selectAllCheckbox) {
+                    if (fileCheckboxes.length > 0) {
+                        selectAllCheckbox.checked = count === fileCheckboxes.length;
+                        selectAllCheckbox.indeterminate = count > 0 && count < fileCheckboxes.length;
+                        selectAllCheckbox.disabled = false;
+                    } else {
+                        selectAllCheckbox.checked = false;
+                        selectAllCheckbox.indeterminate = false;
+                        selectAllCheckbox.disabled = true;
+                    }
+                }
+                updateActionButtonsState(count); // New line to update our action buttons
+            }
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function (e) {
+                    fileCheckboxes.forEach(checkbox => checkbox.checked = e.target.checked);
+                    newUpdateSelectionUI(); // Use the new/updated UI function
+                });
+            }
+            fileCheckboxes.forEach(checkbox => checkbox.addEventListener('change', newUpdateSelectionUI)); // Use the new/updated UI function
+
+
+            // Event listeners for new action buttons
+            if (encryptBtn) {
+                encryptBtn.addEventListener('click', function () {
+                    const selectedPaths = getSelectedFilePaths();
+                    handleFileAction('encrypt', selectedPaths);
+                });
+            }
+            if (decryptBtn) {
+                decryptBtn.addEventListener('click', function () {
+                    const selectedPaths = getSelectedFilePaths();
+                    handleFileAction('decrypt', selectedPaths);
+                });
+            }
+            if (zipBtn) {
+                zipBtn.addEventListener('click', function () {
+                    const selectedPaths = getSelectedFilePaths();
+                    handleFileAction('zip', selectedPaths);
+                });
+            }
+            if (unzipBtn) {
+                unzipBtn.addEventListener('click', function () {
+                    const selectedPaths = getSelectedFilePaths();
+                    handleFileAction('unzip', selectedPaths);
+                });
+            }
+            if (deleteBtn) {
+                deleteBtn.addEventListener('click', function () {
+                    const selectedPaths = getSelectedFilePaths();
+                    handleFileAction('delete', selectedPaths);
+                });
+            }
+            newUpdateSelectionUI(); // Initial call to set button states and UI
+        });
+        /*]]>*/
+    </script>
 
 
 

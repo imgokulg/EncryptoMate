@@ -15,15 +15,16 @@ public class FileInfo {
     private String path;
     private boolean isDirectory;
     private long size;
+    private String formattedSize;
     private URI fileUri;
     private LocalDateTime lastModified;
     private String fileType;
     private String icon;
-    public String getFormattedSize() {
-        if (isDirectory) return "-";
-        if (size < 1024) return size + " B";
-        if (size < 1024 * 1024) return String.format("%.1f KB", size / 1024.0);
-        if (size < 1024 * 1024 * 1024) return String.format("%.1f MB", size / (1024.0 * 1024.0));
-        return String.format("%.1f GB", size / (1024.0 * 1024.0 * 1024.0));
+    public void setSize(long size) {
+        this.size = size;
+        this.formattedSize = size == 0 ? "0 Bytes" :
+                String.format("%." + (Math.max(2, 0)) + "f %s",
+                        size / Math.pow(1024, (int) (Math.log(size) / Math.log(1024))),
+                        new String[]{"Bytes", "KB", "MB", "GB", "TB", "PB"}[(int) (Math.log(size) / Math.log(1024))]);
     }
 }

@@ -5,6 +5,7 @@ import com.gsk.encryptomate.model.FileInfo;
 import com.gsk.encryptomate.service.ConfigService;
 import com.gsk.encryptomate.service.EncryptionService;
 import com.gsk.encryptomate.service.FileService;
+import com.gsk.encryptomate.service.ZipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Controller
-public class FileExplorerController {
-    private static final Logger LOGGER = Logger.getLogger(FileExplorerController.class.getName());
+public class HomeController {
+    private static final Logger LOGGER = Logger.getLogger(HomeController.class.getName());
 
     @Autowired
     private ConfigService configService;
@@ -36,9 +37,11 @@ public class FileExplorerController {
 
     @Autowired
     private EncryptionService encryptionService;
+    @Autowired
+    private ZipService zipService;
 
-    @GetMapping("/")
-    @PostMapping("/")
+    @GetMapping({ "/", "/home", "/index", "/index.html" })
+    @PostMapping({ "/", "/home", "/index", "/index.html" })
     public String index(@RequestParam(defaultValue = "") String path, Model model) {
         try {
             List<FileInfo> files = fileService.listFiles(path);
@@ -85,7 +88,7 @@ public class FileExplorerController {
     public ResponseEntity<String> encryptFiles(@RequestBody EncryptionRequest request) {
         try {
             encryptionService.encryptFiles(request.getFilePaths());
-            return ResponseEntity.ok("{\"mesage\":\"Files encrypted successfully\"}");
+            return ResponseEntity.ok("{\"message\":\"Files encrypted successfully\"}");
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             return ResponseEntity.badRequest().body("Encryption failed: " + e.getMessage());
@@ -97,11 +100,51 @@ public class FileExplorerController {
     public ResponseEntity<String> decryptFiles(@RequestBody EncryptionRequest request) {
         try {
             encryptionService.decryptFiles(request.getFilePaths());
-            return ResponseEntity.ok("{\"mesage\":\"Files decrypted successfully\"}");
+            return ResponseEntity.ok("{\"message\":\"Files decrypted successfully\"}");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             return ResponseEntity.badRequest().body("Decryption failed: " + e.getMessage());
         }
     }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteFiles(@RequestBody EncryptionRequest request) {
+        try {
+            encryptionService.deleteFiles(request.getFilePaths());
+            return ResponseEntity.ok("{\"message\":\"Files deleted successfully\"}");
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            return ResponseEntity.badRequest().body("Deletion failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/zip")
+    @ResponseBody
+    public ResponseEntity<String> zipFiles(@RequestBody EncryptionRequest request) {
+        try {
+            zipService.zipMultiple(request.getFilePaths());
+            return ResponseEntity.ok("{\"message\":\"Files zipped successfully\"}");
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            return ResponseEntity.badRequest().body("Zip failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/unzip")
+    @ResponseBody
+    public ResponseEntity<String> unzipFiles(@RequestBody EncryptionRequest request) {
+        try {
+            encryptionService.deleteFiles(request.getFilePaths());
+            return ResponseEntity.ok("{\"message\":\"Files unzipped successfully\"}");
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            return ResponseEntity.badRequest().body("Unzip failed: " + e.getMessage());
+        }
+    }
+
 }

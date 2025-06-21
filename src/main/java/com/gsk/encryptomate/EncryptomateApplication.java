@@ -24,7 +24,7 @@ public class EncryptomateApplication {
 
     // Create the root directory if it doesn't exist on startup
     @Bean
-    CommandLineRunner init(@Value("${file.explorer.root-path}") String rootDir) {
+    CommandLineRunner init(@Value("${encryption.config.root-path}") String rootDir) {
         return args -> {
             Path rootPath = Paths.get(rootDir);
             if (Files.notExists(rootPath)) {

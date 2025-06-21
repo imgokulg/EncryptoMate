@@ -42,6 +42,6 @@ public class ConfigService {
     }
 
     public String[] getKeyDerivationFunctions() {
-        return new String[]{"PBKDF2WithHmacSHA256", "Scrypt"};
+        return new String[]{"PBKDF2WithHmacSHA256"};
     }
 }
